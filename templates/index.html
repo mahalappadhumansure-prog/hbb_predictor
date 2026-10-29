@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HBB Variant Pathogenicity Predictor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="" onerror="this.style.display='none'">
+      <span>RV College of<br>Engineering</span>
+    </div>
+    <div class="title">
+      <h1>HBB Variant Pathogenicity Predictor</h1>
+      <p>Explainable Machine Learning using DNA Sequence Features</p>
+    </div>
+    <nav>
+      <a class="active" href="#">Home</a><a href="#">About</a><a href="#predict">Predict</a><a href="#results">Results</a><a href="#">Documentation</a>
+    </nav>
+  </header>
+
+  <main class="grid">
+    <!-- 1. Input -->
+    <section class="card" id="predict">
+      <h2><span class="num navy">1</span>Input DNA Sequence</h2>
+      <p>Enter an HBB gene coding sequence or select an example variant to predict its pathogenicity.</p>
+      <label for="example">Example Variants:</label>
+      <select id="example"></select>
+      <div class="or">OR</div>
+      <label for="seq">Enter DNA Sequence (FASTA format):</label>
+      <textarea id="seq" rows="6" spellcheck="false"></textarea>
+      <small>Expects the HBB coding sequence starting at ATG (single-nucleotide substitutions).</small>
+      <button id="predictBtn">&#9881; Predict Variant</button>
+      <div id="error" class="error" hidden></div>
+    </section>
+
+    <div class="right" id="results">
+      <!-- 2. Result -->
+      <section class="card">
+        <h2><span class="num green">2</span>Prediction Result</h2>
+        <div id="result" class="result">
+          <div class="row"><span>Predicted Class:</span><strong id="cls">—</strong><span id="badge" class="badge"></span></div>
+          <div class="row"><span>Confidence Score:</span><strong id="conf">—</strong><div class="bar"><div id="confBar"></div></div></div>
+          <p id="msg" class="msg"></p>
+        </div>
+      </section>
+
+      <!-- 3. SHAP -->
+      <section class="card">
+        <h2><span class="num blue">3</span>Model Explanation (SHAP)</h2>
+        <p>Important sequence features that influenced the prediction:</p>
+        <div class="shap">
+          <div class="panel"><div id="shapBars" class="hbars"></div><div class="axis">Feature contribution (SHAP value)</div></div>
+          <div class="panel"><h4>SHAP Summary Plot</h4><img src="/summary.png" alt="SHAP summary plot"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 4. Sequence information -->
+    <section class="card">
+      <h2><span class="num navy">4</span>Sequence Information</h2>
+      <table id="info">
+        <tr><th>Gene</th><td>—</td></tr><tr><th>Sequence Length</th><td>—</td></tr>
+        <tr><th>Variant Position</th><td>—</td></tr><tr><th>Reference Nucleotide</th><td>—</td></tr>
+        <tr><th>Alternate Nucleotide</th><td>—</td></tr><tr><th>Amino Acid Change</th><td>—</td></tr>
+        <tr><th>Conservation Score</th><td>—</td></tr>
+      </table>
+    </section>
+
+    <!-- 5. Visualisation -->
+    <section class="card">
+      <h2><span class="num navy">5</span>Visualisation</h2>
+      <div class="tabs">
+        <button class="tab active" data-tab="seqView">Sequence View</button>
+        <button class="tab" data-tab="perfView">Model Performance</button>
+        <button class="tab" data-tab="impView">Feature Importance</button>
+      </div>
+      <div id="seqView" class="tabpane active"><h4>HBB Sequence (highlighting variant position)</h4><div id="seqBox" class="seqbox">Run a prediction to see the sequence.</div></div>
+      <div id="perfView" class="tabpane"></div>
+      <div id="impView" class="tabpane"><div id="impBars" class="hbars"></div></div>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
